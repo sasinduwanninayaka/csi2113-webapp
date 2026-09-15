@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    image: sasinduwanninayaka/csi2113-cicd:latest
+    container_name: csi2113-webapp
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
