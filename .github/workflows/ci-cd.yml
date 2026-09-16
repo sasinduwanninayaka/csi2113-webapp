@@ -45,22 +45,23 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/csi2113-cicd:latest
 
-  deploy:
+    deploy:
     needs: build-and-push
     if: github.event_name == 'push'
     runs-on: self-hosted
     steps:
       - name: Pull latest image
-        run: docker pull %DOCKERHUB_USERNAME%/csi2113-cicd:latest
+        run: docker pull $env:DOCKERHUB_USERNAME/csi2113-cicd:latest
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
 
       - name: Stop old container if running
         run: |
-          docker stop csi2113-webapp || exit 0
-          docker rm csi2113-webapp || exit 0
+          docker stop csi2113-webapp
+          docker rm csi2113-webapp
+        continue-on-error: true
 
       - name: Run new container
-        run: docker run -d --name csi2113-webapp -p 5000:5000 %DOCKERHUB_USERNAME%/csi2113-cicd:latest
+        run: docker run -d --name csi2113-webapp -p 5000:5000 $env:DOCKERHUB_USERNAME/csi2113-cicd:latest
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
