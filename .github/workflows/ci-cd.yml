@@ -45,7 +45,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/csi2113-cicd:latest
 
-    deploy:
+  deploy:
     needs: build-and-push
     if: github.event_name == 'push'
     runs-on: self-hosted
